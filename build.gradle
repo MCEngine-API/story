@@ -1,0 +1,112 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'java'
+    id 'maven-publish'
+}
+
+// Set project metadata
+group = 'io.github.mcengine'
+version = project.findProperty("${project.name}.version")
+
+// Project-wide variables
+ext {
+    user_git_name = System.getenv('USER_GIT_NAME')
+    user_github_token = System.getenv('USER_GITHUB_TOKEN')
+
+    organization_name = System.getenv('ORGANIZATION_NAME') ?: 'MCEngine'
+    organization_token = System.getenv('ORGANIZATION_TOKEN')
+
+    repository_name = System.getenv('REPOSITORY_NAME') ?: 'story-api'
+    repository_token = System.getenv('REPOSITORY_TOKEN')
+
+    jarName = System.getenv('PROJECT_NAME') ?: 'MCEngineStory'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots'
+        content {
+            includeGroup 'org.bukkit'
+            includeGroup 'org.spigotmc'
+        }
+    }
+
+    maven {
+        name = "papermc"
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+
+    maven { url = 'https://oss.sonatype.org/content/repositories/snapshots' }
+    maven { url = 'https://oss.sonatype.org/content/repositories/central' }
+
+    maven {
+        url = uri("https://maven.pkg.github.com/${organization_name}/${repository_name}")
+        credentials {
+            username = user_git_name
+            password = user_github_token ?: repository_token ?: organization_token
+        }
+    }
+}
+
+dependencies {
+    compileOnly 'mysql:mysql-connector-java:8.0.33'
+    compileOnly 'org.xerial:sqlite-jdbc:3.50.1.0'
+    compileOnly 'org.spigotmc:spigot-api:1.21.5-R0.1-SNAPSHOT'
+}
+
+tasks.named('jar') {
+    enabled = false
+}
+
+tasks.named('shadowJar') {
+    archiveBaseName.set(jarName)
+    archiveClassifier.set(null)
+    archiveVersion.set(version)
+}
+
+build.dependsOn tasks.named('shadowJar')
+
+// Publishing
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact tasks.named('shadowJar').get()
+            artifactId = 'mcengine-story-api'
+
+            pom {
+                name.set(jarName)
+                description.set("The ${jarName} API is designed for use by AddOns, DLCs, and other plugins.")
+                url.set("https://github.com/${organization_name}/${repository_name}")
+
+                scm {
+                    connection.set("scm:git:git://github.com/${organization_name}/${repository_name}.git")
+                    developerConnection.set("scm:git:ssh://github.com:${organization_name}/${repository_name}.git")
+                    url.set("https://github.com/${organization_name}/${repository_name}")
+                }
+
+                developers {
+                    developer {
+                        id.set('jetsadawijit')
+                        name.set('Jetsada Wijit')
+                        email.set('jetsadawijit@outlook.com')
+                        url.set('https://jetsadawijit.github.io')
+                    }
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = 'GitHubPackages'
+            url = uri("https://maven.pkg.github.com/${organization_name}/${repository_name}")
+            credentials {
+                username = user_git_name
+                password = user_github_token ?: repository_token ?: organization_token
+            }
+        }
+    }
+}
