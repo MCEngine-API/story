@@ -16,6 +16,11 @@ public class MCEngineStoryPostgreSQL implements IMCEngineStoryDB {
     /** Persistent PostgreSQL connection. */
     private final Connection conn;
 
+    /**
+     * Initializes the PostgreSQL connection using plugin configuration.
+     *
+     * @param plugin The Bukkit plugin instance.
+     */
     public MCEngineStoryPostgreSQL(Plugin plugin) {
         this.plugin = plugin;
 
@@ -45,5 +50,20 @@ public class MCEngineStoryPostgreSQL implements IMCEngineStoryDB {
     @Override
     public Connection getDBConnection() {
         return conn;
+    }
+
+    /**
+     * Disconnects the PostgreSQL connection.
+     */
+    @Override
+    public void disConnection() {
+        try {
+            if (conn != null && !conn.isClosed()) {
+                conn.close();
+                plugin.getLogger().info("Disconnected from PostgreSQL.");
+            }
+        } catch (SQLException e) {
+            plugin.getLogger().warning("Error closing PostgreSQL connection: " + e.getMessage());
+        }
     }
 }

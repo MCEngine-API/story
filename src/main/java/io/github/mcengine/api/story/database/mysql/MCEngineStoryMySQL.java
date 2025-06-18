@@ -14,6 +14,11 @@ public class MCEngineStoryMySQL implements IMCEngineStoryDB {
     /** Persistent MySQL connection. */
     private final Connection conn;
 
+    /**
+     * Initializes the MySQL connection using plugin configuration.
+     *
+     * @param plugin The Bukkit plugin instance.
+     */
     public MCEngineStoryMySQL(Plugin plugin) {
         this.plugin = plugin;
 
@@ -43,5 +48,20 @@ public class MCEngineStoryMySQL implements IMCEngineStoryDB {
     @Override
     public Connection getDBConnection() {
         return conn;
+    }
+
+    /**
+     * Disconnects the MySQL connection.
+     */
+    @Override
+    public void disConnection() {
+        try {
+            if (conn != null && !conn.isClosed()) {
+                conn.close();
+                plugin.getLogger().info("Disconnected from MySQL.");
+            }
+        } catch (SQLException e) {
+            plugin.getLogger().warning("Error closing MySQL connection: " + e.getMessage());
+        }
     }
 }

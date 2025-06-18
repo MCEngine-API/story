@@ -13,37 +13,52 @@ public class MCEngineStorySQLite implements IMCEngineStoryDB {
     /** The Bukkit plugin instance. */
     private final Plugin plugin;
 
-    /** Persistent PostgreSQL connection. */
+    /** Persistent SQLite connection. */
     private final Connection conn;
-    
+
+    /**
+     * Initializes the SQLite connection using plugin configuration.
+     *
+     * @param plugin The Bukkit plugin instance.
+     */
     public MCEngineStorySQLite(Plugin plugin) {
         this.plugin = plugin;
 
-        String host = plugin.getConfig().getString("database.postgresql.host", "localhost");
-        String port = plugin.getConfig().getString("database.postgresql.port", "5432");
-        String dbName = plugin.getConfig().getString("database.postgresql.name", "mcengine_ai");
-        String user = plugin.getConfig().getString("database.postgresql.user", "postgres");
-        String pass = plugin.getConfig().getString("database.postgresql.password", "");
-
-        String jdbcUrl = "jdbc:postgresql://" + host + ":" + port + "/" + dbName;
+        String dbPath = plugin.getDataFolder().getAbsolutePath() + "/mcengine_ai.db";
+        String jdbcUrl = "jdbc:sqlite:" + dbPath;
 
         Connection tempConn = null;
         try {
-            tempConn = DriverManager.getConnection(jdbcUrl, user, pass);
+            tempConn = DriverManager.getConnection(jdbcUrl);
         } catch (SQLException e) {
-            plugin.getLogger().warning("Failed to connect to PostgreSQL: " + e.getMessage());
+            plugin.getLogger().warning("Failed to connect to SQLite: " + e.getMessage());
             e.printStackTrace();
         }
         this.conn = tempConn;
     }
 
     /**
-     * Returns the current PostgreSQL database connection.
+     * Returns the current SQLite database connection.
      *
-     * @return Active {@link Connection} to the PostgreSQL database.
+     * @return Active {@link Connection} to the SQLite database.
      */
     @Override
     public Connection getDBConnection() {
         return conn;
+    }
+
+    /**
+     * Disconnects the SQLite connection.
+     */
+    @Override
+    public void disConnection() {
+        try {
+            if (conn != null && !conn.isClosed()) {
+                conn.close();
+                plugin.getLogger().info("Disconnected from SQLite.");
+            }
+        } catch (SQLException e) {
+            plugin.getLogger().warning("Error closing SQLite connection: " + e.getMessage());
+        }
     }
 }

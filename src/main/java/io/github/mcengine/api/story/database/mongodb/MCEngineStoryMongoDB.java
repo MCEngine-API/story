@@ -9,7 +9,8 @@ import java.sql.Connection;
 
 /**
  * MongoDB implementation of the MCEngineStory database connection.
- * Since MongoDB doesn't use {@link java.sql.Connection}, getDBConnection returns null.
+ * <p>
+ * Note: MongoDB does not use JDBC, so {@link #getDBConnection()} always returns {@code null}.
  */
 public class MCEngineStoryMongoDB implements IMCEngineStoryDB {
 
@@ -24,7 +25,12 @@ public class MCEngineStoryMongoDB implements IMCEngineStoryDB {
 
     /** MongoDB collection used for token storage. */
     private final MongoCollection<Document> collection;
-    
+
+    /**
+     * Initializes the MongoDB connection using configuration from the plugin.
+     *
+     * @param plugin The Bukkit plugin instance.
+     */
     public MCEngineStoryMongoDB(Plugin plugin){
         this.plugin = plugin;
 
@@ -40,12 +46,23 @@ public class MCEngineStoryMongoDB implements IMCEngineStoryDB {
     }
 
     /**
-     * MongoDB does not use JDBC, so this returns null.
+     * MongoDB does not support JDBC connections. This method always returns {@code null}.
      *
-     * @return Always returns null.
+     * @return {@code null}, since MongoDB is not compatible with {@link Connection}.
      */
     @Override
     public Connection getDBConnection() {
         return null;
+    }
+
+    /**
+     * Disconnects the MongoDB client.
+     */
+    @Override
+    public void disConnection() {
+        if (mongoClient != null) {
+            mongoClient.close();
+            plugin.getLogger().info("Disconnected from MongoDB.");
+        }
     }
 }
