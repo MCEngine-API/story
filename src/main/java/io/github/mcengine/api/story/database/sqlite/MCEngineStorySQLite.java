@@ -1,6 +1,6 @@
 package io.github.mcengine.api.story.database.sqlite;
 
-import io.github.mcengine.story.api.database.IMCEngineStoryDB;
+import io.github.mcengine.api.story.database.IMCEngineStoryDB;
 
 import org.bukkit.plugin.Plugin;
 import java.io.File;

@@ -1,6 +1,6 @@
 package io.github.mcengine.api.story.database.mongodb;
 
-import io.github.mcengine.story.api.database.IMCEngineStoryDB;
+import io.github.mcengine.api.story.database.IMCEngineStoryDB;
 
 import com.mongodb.client.*;
 import org.bson.Document;

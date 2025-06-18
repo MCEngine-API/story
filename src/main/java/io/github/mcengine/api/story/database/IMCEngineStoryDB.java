@@ -1,4 +1,4 @@
-package io.github.mcengine.story.api.database;
+package io.github.mcengine.api.story.database;
 
 import java.sql.Connection;
 
