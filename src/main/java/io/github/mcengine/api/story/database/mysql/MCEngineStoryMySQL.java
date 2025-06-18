@@ -45,7 +45,6 @@ public class MCEngineStoryMySQL implements IMCEngineStoryDB {
      *
      * @return Active {@link Connection} to the MySQL database.
      */
-    @Override
     public Connection getDBConnection() {
         return conn;
     }
@@ -53,7 +52,6 @@ public class MCEngineStoryMySQL implements IMCEngineStoryDB {
     /**
      * Disconnects the MySQL connection.
      */
-    @Override
     public void disConnection() {
         try {
             if (conn != null && !conn.isClosed()) {

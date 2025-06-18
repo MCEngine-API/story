@@ -50,7 +50,6 @@ public class MCEngineStoryMongoDB implements IMCEngineStoryDB {
      *
      * @return {@code null}, since MongoDB is not compatible with {@link Connection}.
      */
-    @Override
     public Connection getDBConnection() {
         return null;
     }
@@ -58,7 +57,6 @@ public class MCEngineStoryMongoDB implements IMCEngineStoryDB {
     /**
      * Disconnects the MongoDB client.
      */
-    @Override
     public void disConnection() {
         if (mongoClient != null) {
             mongoClient.close();

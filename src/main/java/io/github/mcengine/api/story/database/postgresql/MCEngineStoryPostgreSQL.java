@@ -47,7 +47,6 @@ public class MCEngineStoryPostgreSQL implements IMCEngineStoryDB {
      *
      * @return Active {@link Connection} to the PostgreSQL database.
      */
-    @Override
     public Connection getDBConnection() {
         return conn;
     }
@@ -55,7 +54,6 @@ public class MCEngineStoryPostgreSQL implements IMCEngineStoryDB {
     /**
      * Disconnects the PostgreSQL connection.
      */
-    @Override
     public void disConnection() {
         try {
             if (conn != null && !conn.isClosed()) {
