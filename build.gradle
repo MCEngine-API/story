@@ -79,7 +79,7 @@ publishing {
 
             pom {
                 name.set(jarName)
-                description.set("The ${jarName} API is designed for use by AddOns, DLCs, and other plugins.")
+                description.set("The ${jarName} API is designed for use by Story plugins.")
                 url.set("https://github.com/${organization_name}/${repository_name}")
 
                 scm {
