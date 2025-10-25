@@ -1,7 +1,6 @@
 package io.github.mcengine.api.story;
 
 import io.github.mcengine.api.story.database.IMCEngineStoryDB;
-import io.github.mcengine.api.story.database.mongodb.MCEngineStoryMongoDB;
 import io.github.mcengine.api.story.database.mysql.MCEngineStoryMySQL;
 import io.github.mcengine.api.story.database.postgresql.MCEngineStoryPostgreSQL;
 import io.github.mcengine.api.story.database.sqlite.MCEngineStorySQLite;
@@ -42,7 +41,6 @@ public class MCEngineStoryApi {
             case "sqlite" -> this.db = new MCEngineStorySQLite(plugin);
             case "mysql" -> this.db = new MCEngineStoryMySQL(plugin);
             case "postgresql" -> this.db = new MCEngineStoryPostgreSQL(plugin);
-            case "mongodb" -> this.db = new MCEngineStoryMongoDB(plugin);
             default -> throw new IllegalArgumentException("Unsupported database type: " + dbType);
         }
     }
