@@ -110,7 +110,7 @@ dependencies {
 
     compileOnly 'mysql:mysql-connector-java:8.0.33'
 
-    compileOnly 'org.xerial:sqlite-jdbc:3.51.0.0'
+    compileOnly 'org.xerial:sqlite-jdbc:3.51.1.0'
 }
 
 tasks.named('jar') {
